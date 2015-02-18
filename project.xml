@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<meta title="Preloader" package="com.akifox.Preloader" version="1.0.0" company="Akifox Studio" />
+    <app main="Main" path="Export" file="Preloader" preloader="Preloader" />
+
+	<window fps="60" background="0x00b6b2" />
+	<window width="800" height="600" resizable="true" unless="mobile" />
+	<window fullscreen="true" if="mobile" />
+	<window orientation="landscape" />
+	<window vsync="true" antialiasing="0" if="cpp" />
+	<window hardware="true" allow-shaders="true" require-shaders="false" if="cpp"/>
+	
+	<source path="src" />
+	
+    <haxelib name="openfl" />
+	<!--<haxelib name="actuate" />-->
+	
+	<assets path="assets" include="*.png|*.ttf" />
+
+	<icon path="assets/openfl.svg" />
+	
+</project>
