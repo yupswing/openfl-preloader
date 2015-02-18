@@ -63,10 +63,10 @@ class Preloader extends NMEPreloader
         Lib.current.stage.addEventListener (MouseEvent.CLICK, gotoWebsite, false, 0, true);
 
         // listener to finish event
-        addEventListener(Event.REMOVED, finish);
+        addEventListener(Event.COMPLETE, onComplete);
         
     }
-    public function finish (event:Event):Void {
+    public function onComplete (event:Event):Void {
         // restore original background color
         Lib.current.stage.color = originalBackgroundColor;
     }
