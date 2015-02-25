@@ -2,6 +2,8 @@
 <project>
 	
 	<meta title="Preloader" package="com.akifox.Preloader" version="1.0.0" company="Akifox Studio" />
+
+	<!-- TO ENABLE THE PRELOADER IN FLASH AND HTML5 ADD THE PRELOADER ATTRIBUTE-->
     <app main="Main" path="Export" file="Preloader" preloader="Preloader" />
 
 	<window fps="60" background="0x00b6b2" />
@@ -14,9 +16,11 @@
 	<source path="src" />
 	
     <haxelib name="openfl" />
-	<!--<haxelib name="actuate" />-->
 	
-	<assets path="assets" include="*.png|*.ttf" />
+	<assets path="assets" include="*.png" />
+
+	<!-- THIS IS NEEDED BY THE PRELOADER -->
+	<assets path="assets/preloader" include="*" />
 
 	<icon path="assets/openfl.svg" />
 	

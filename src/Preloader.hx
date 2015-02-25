@@ -12,15 +12,16 @@ import openfl.events.MouseEvent;
 import openfl.net.URLRequest;
 
 //*SPLASH*import for the top picture
-/*import openfl.display.Bitmap;
-import openfl.display.BitmapData;*/
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 
 //in the preloader YOU HAVE TO use macro to load images or other assets
 // instead of Assets.getXXX()
-@:font("assets/square.ttf") class DefaultFont extends Font {}
 
-//load the top picture (if you want to use this uncomment every *SPLASH* below)
-/*@:bitmap("assets/graphic/logo.png") class Splash extends BitmapData {}*/
+// please provide this files (or change them) in your assets folder
+// and be sure to add them (or their folder) in your project.xml
+@:font("assets/preloader/square.ttf") class DefaultFont extends Font {}
+@:bitmap("assets/preloader/logo.png") class Splash extends BitmapData {}
 
 class Preloader extends NMEPreloader
 {
@@ -49,7 +50,8 @@ class Preloader extends NMEPreloader
     var oscillatorDirection:Int = -1; // increase or decrease
 
     // *SPLASH* variable for the top picture
-    /* var splash:Bitmap; */
+    var splash:Bitmap;
+    var splashHeight:Float;
 
     public function new () {
         
@@ -69,6 +71,8 @@ class Preloader extends NMEPreloader
     public function onComplete (event:Event):Void {
         // restore original background color
         Lib.current.stage.color = originalBackgroundColor;
+        Lib.current.stage.removeEventListener(Event.RESIZE, stage_onResize);
+        Lib.current.stage.removeEventListener(MouseEvent.CLICK, gotoWebsite);
     }
     
     private function init ():Void {
@@ -80,9 +84,10 @@ class Preloader extends NMEPreloader
         Lib.current.stage.color = backgroundColor;
 
         //*SPLASH* Prepare the top picture
-/*       splash = new Bitmap(new Splash(0,0));
+        splash = new Bitmap(new Splash(0,0));
         splash.smoothing = true;
-        addChild(splash);*/ //add the top picture
+        addChild(splash); //add the logo
+        splashHeight = splash.height;
 
         //prepare the percent label
         textPercent = new TextField();
@@ -120,10 +125,12 @@ class Preloader extends NMEPreloader
         var x = (ww-w)/2;   //centered (center bar position x,y)
         var y = hh*0.8;
 
-        //*SPLASH* Resize the top picture
-        /*var scale:Float = ww / splash.width;
+        //*SPLASH* Resize the picture
+        var scale:Float = hh / 1.5 / splashHeight; // 1/3 of total
         splash.scaleX = scale;
-        splash.scaleY = scale;*/
+        splash.scaleY = scale;
+        splash.x = ww/2-splash.width/2;
+        splash.y = hh/3-splash.height/2;
 
         outline.x = x-p;
         outline.y = y-p;
@@ -148,16 +155,18 @@ class Preloader extends NMEPreloader
 
         var formatPercent = new TextFormat ("SquareFont", hh/20, color);
         textPercent.defaultTextFormat = formatPercent; //dynamic text
+        textPercent.setTextFormat(formatPercent); //static text
         textPercent.autoSize = TextFieldAutoSize.RIGHT;
+        textPercent.x = ww-(ww-w)/2-textPercent.textWidth;
         textPercent.y = y+1.5*h;
         
     }
 
-	public override function onUpdate(bytesLoaded:Int, bytesTotal:Int)
-	{
+    public override function onUpdate(bytesLoaded:Int, bytesTotal:Int)
+    {
         // calculate the percent loaded
-		var percentLoaded = bytesLoaded / bytesTotal;
-		if (percentLoaded > 1) percentLoaded = 1;
+        var percentLoaded = bytesLoaded / bytesTotal;
+        if (percentLoaded > 1) percentLoaded = 1;
 
         // oscillate from 0.3 to 1 and back for the glowing effect
         oscillator += oscillatorDirection * 0.06;
@@ -176,14 +185,14 @@ class Preloader extends NMEPreloader
 
         // update the progress bar
         progress.graphics.clear();
-		progress.graphics.beginFill(color, 0.8);
+        progress.graphics.beginFill(color, 0.8);
         progress.graphics.drawRoundRect(0,0,percentLoaded*w,h,r,r);
         progress.graphics.endFill();
 
         // the glowing effect!
         textLoading.alpha = oscillator;
         outline.alpha = oscillator;
-	}
+    }
 
     private function gotoWebsite(event:MouseEvent):Void 
     {
