@@ -1,4 +1,4 @@
-<img src="https://img.shields.io/badge/app-OpenFL%20Preloader%201.0-brightgreen.svg">
+<img src="https://img.shields.io/badge/app-OpenFL%20Preloader%201.1-brightgreen.svg">
 <a href="blob/master/LICENCE"><img src="https://img.shields.io/badge/licence-MIT-blue.svg"></a>
 <a href="https://www.haxe.org/"><img src="https://img.shields.io/badge/language-Haxe%203-green.svg"></a>
 <a href="http://www.openfl.org/"><img src="https://img.shields.io/badge/require-OpenFL-red.svg"></a>
