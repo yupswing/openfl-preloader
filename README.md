@@ -29,7 +29,7 @@ This project offers a class (Preloader.hx) and a pratical use.
 You can use the class in your project like Main.hx does here.
 
 Here's how the preloader looks like. (with automatic fluid scaling on resize)
-<img src="https://dl.dropboxusercontent.com/u/683344/akifox/preloader/screenshot.jpg" width="50%">
+<img src="https://dl.dropboxusercontent.com/u/683344/akifox/preloader/screenshot.jpg">
 
 You can customize the colors very easily, and if you code (and I know you code) you can change the class and make it fit your needs.
 
