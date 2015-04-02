@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	
+
 	<meta title="Preloader" package="com.akifox.Preloader" version="1.0.0" company="Akifox Studio" />
 
 	<!-- TO ENABLE THE PRELOADER IN FLASH AND HTML5 ADD THE PRELOADER ATTRIBUTE-->
@@ -12,16 +12,17 @@
 	<window orientation="landscape" />
 	<window vsync="true" antialiasing="0" if="cpp" />
 	<window hardware="true" allow-shaders="true" require-shaders="false" if="cpp"/>
-	
+
 	<source path="src" />
-	
+
     <haxelib name="openfl" />
-	
+
 	<assets path="assets" include="*.png" />
 
 	<!-- THIS IS NEEDED BY THE PRELOADER -->
-	<assets path="assets/preloader" include="*" />
+	<!-- Only HTML5 and FLASH use the preloader, not native -->
+	<assets path="assets/preloader" include="*" if="web" />
 
 	<icon path="assets/openfl.svg" />
-	
+
 </project>

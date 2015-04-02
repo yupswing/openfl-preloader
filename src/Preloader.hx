@@ -19,18 +19,19 @@ import openfl.display.BitmapData;
 // instead of Assets.getXXX()
 
 // please provide this files (or change them) in your assets folder
-// and be sure to add them (or their folder) in your project.xml
+// and add this line to your project.xml
+// <assets path="assets/preloader" include="*" if="web" />
 @:font("assets/preloader/square.ttf") class DefaultFont extends Font {}
 @:bitmap("assets/preloader/logo.png") class Splash extends BitmapData {}
 
 class Preloader extends NMEPreloader
 {
-    // **** CUSTOMIZE HERE ****
+    // **** CUSTOMISE HERE ****
     static var color = 0xff9600; //the main color
     static var backgroundColor = 0x333333; //background color
     static var stringLoading = "Loading"; //the loading label text
     static var website = "http://akifox.com"; //your website, every click count!
-    // **** END CUSTOMIZE ****
+    // **** END CUSTOMISE ****
 
     var originalBackgroundColor:Int;
 
@@ -45,7 +46,7 @@ class Preloader extends NMEPreloader
 
     var textPercent:TextField; // percentage label
     var textLoading:TextField; // loading label
-    
+
     var oscillator:Float = 1.0; // alpha for glowing effect
     var oscillatorDirection:Int = -1; // increase or decrease
 
@@ -54,27 +55,29 @@ class Preloader extends NMEPreloader
     var splashHeight:Float;
 
     public function new () {
-        
+
         super ();
-        
+
         init ();
 
         //first resize and listener
         stage_onResize(null);
-        Lib.current.stage.addEventListener (Event.RESIZE, stage_onResize);
-        Lib.current.stage.addEventListener (MouseEvent.CLICK, gotoWebsite, false, 0, true);
+        Lib.current.stage.addEventListener(Event.RESIZE, stage_onResize);
+        Lib.current.stage.addEventListener(Event.ENTER_FRAME, onFrame);
+        Lib.current.stage.addEventListener(MouseEvent.CLICK, gotoWebsite, false, 0, true);
 
         // listener to finish event
         addEventListener(Event.COMPLETE, onComplete);
-        
+
     }
     public function onComplete (event:Event):Void {
         // restore original background color
         Lib.current.stage.color = originalBackgroundColor;
         Lib.current.stage.removeEventListener(Event.RESIZE, stage_onResize);
+        Lib.current.stage.removeEventListener(Event.ENTER_FRAME, onFrame);
         Lib.current.stage.removeEventListener(MouseEvent.CLICK, gotoWebsite);
     }
-    
+
     private function init ():Void {
 
         Font.registerFont (DefaultFont);
@@ -104,14 +107,14 @@ class Preloader extends NMEPreloader
         addChild(textLoading);
 
     }
-    
-    
+
+
     private function stage_onResize (event:Event):Void {
 
         resize (Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
-        
+
     }
-    
+
     private function resize (newWidth:Int, newHeight:Int):Void {
 
         ww = newWidth;
@@ -126,7 +129,7 @@ class Preloader extends NMEPreloader
         var y = hh*0.8;
 
         //*SPLASH* Resize the picture
-        var scale:Float = hh / 1.5 / splashHeight; // 1/3 of total
+        var scale:Float = hh / 2 / splashHeight;
         splash.scaleX = scale;
         splash.scaleY = scale;
         splash.x = ww/2-splash.width/2;
@@ -137,7 +140,7 @@ class Preloader extends NMEPreloader
         outline.graphics.clear();
         outline.graphics.lineStyle(t, color, 1, true);
         outline.graphics.drawRoundRect(0,0,w+2*p,h+2*p,r*2,r*2);
-        
+
         progress.x = x;
         progress.y = y;
         progress.scaleX = 1;
@@ -159,25 +162,14 @@ class Preloader extends NMEPreloader
         textPercent.autoSize = TextFieldAutoSize.RIGHT;
         textPercent.x = ww-(ww-w)/2-textPercent.textWidth;
         textPercent.y = y+1.5*h;
-        
+
     }
 
-    public override function onUpdate(bytesLoaded:Int, bytesTotal:Int)
-    {
+	public override function onUpdate(bytesLoaded:Int, bytesTotal:Int)
+	{
         // calculate the percent loaded
-        var percentLoaded = bytesLoaded / bytesTotal;
-        if (percentLoaded > 1) percentLoaded = 1;
-
-        // oscillate from 0.3 to 1 and back for the glowing effect
-        oscillator += oscillatorDirection * 0.06;
-        if (oscillator > 1) {
-            oscillatorDirection = -1;
-            oscillator = 1.0;
-        }
-        if (oscillator < 0.3) {
-            oscillatorDirection = 1;
-            oscillator = 0.3;
-        }
+		var percentLoaded = bytesLoaded / bytesTotal;
+		if (percentLoaded > 1) percentLoaded = 1;
 
         // update the percent label
         textPercent.text = Std.int(percentLoaded*100) + "%";
@@ -185,16 +177,40 @@ class Preloader extends NMEPreloader
 
         // update the progress bar
         progress.graphics.clear();
-        progress.graphics.beginFill(color, 0.8);
+		progress.graphics.beginFill(color, 0.8);
         progress.graphics.drawRoundRect(0,0,percentLoaded*w,h,r,r);
         progress.graphics.endFill();
+	}
 
-        // the glowing effect!
-        textLoading.alpha = oscillator;
-        outline.alpha = oscillator;
+    private static inline var SKIP_FRAMES:Int=5;
+    private var _skipped_frames:Int=1;
+
+    public function onFrame(event:Event):Void {
+
+        if (_skipped_frames==SKIP_FRAMES) {
+
+            // oscillate from 0.3 to 1 and back for the glowing effect
+            oscillator += oscillatorDirection * 0.06;
+            if (oscillator > 1) {
+                oscillatorDirection = -1;
+                oscillator = 1.0;
+            }
+            if (oscillator < 0.3) {
+                oscillatorDirection = 1;
+                oscillator = 0.3;
+            }
+
+            // the glowing effect!
+            textLoading.alpha = oscillator;
+            outline.alpha = oscillator;
+
+            _skipped_frames = 0;
+
+        }
+        _skipped_frames++;
     }
 
-    private function gotoWebsite(event:MouseEvent):Void 
+    private function gotoWebsite(event:MouseEvent):Void
     {
         // open an url
         Lib.getURL(new URLRequest (website));

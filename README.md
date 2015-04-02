@@ -25,7 +25,7 @@ You can see the original class here https://github.com/openfl/openfl-native/blob
 
 
 # My preloader
-This project offers a class (Preloader.hx) and a pratical use.
+This project offers a class (Preloader.hx) and a real use.
 You can use the class in your project like Main.hx does here.
 
 Here's how the preloader looks like. (with automatic fluid scaling on resize)
