@@ -1,5 +1,12 @@
 package;
 
+/*  OpenFL Preloader
+ *  @version 1.2
+ *  @author Simone Cingano (yupswing)
+ *  @licence MIT
+ *  web: http://akifox.com
+ */
+
 import openfl.Lib;
 import openfl.display.Stage;
 import openfl.display.Sprite;

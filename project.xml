@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 
-	<meta title="Preloader" package="com.akifox.Preloader" version="1.0.0" company="Akifox Studio" />
+	<meta title="Preloader" package="com.akifox.Preloader" version="1.2.0" company="Akifox Studio" />
 
 	<!-- TO ENABLE THE PRELOADER IN FLASH AND HTML5 ADD THE PRELOADER ATTRIBUTE-->
     <app main="Main" path="Export" file="Preloader" preloader="Preloader" />
